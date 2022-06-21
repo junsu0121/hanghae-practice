@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addDataDB, getDataDB } from "./redux/modules/postSlice";
+import { addDataDB, getDataDB, modifyDataDB, removeDataDB } from "./redux/modules/postSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,6 +21,19 @@ function App() {
     contentRef.current.value = "";
   }
 
+  const removePost = (id) => {
+    dispatch(removeDataDB(id));
+  }
+
+  const modifyPost = (id) => {
+    const data = {
+      subject: subjectRef.current.value,
+      content: contentRef.current.value
+    }
+
+    dispatch(modifyDataDB(id, data));
+  }
+
   useEffect(() => {
     dispatch(getDataDB());
   }, []);
@@ -32,6 +45,8 @@ function App() {
           <div key={index}>
             <div>{v.subject}</div>
             <div>{v.content}</div>
+            <button onClick={() => {modifyPost(v.id)}}>수정</button>
+            <button onClick={() => {removePost(v.id)}}>삭제</button>
           </div>
         )
       })}
