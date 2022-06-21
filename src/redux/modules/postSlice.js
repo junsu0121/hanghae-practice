@@ -6,7 +6,7 @@ const instance = axios.create({
 });
 
 export const getDataDB = () => {
-  return async function (dispatch) {
+  return async (dispatch) => {
     try {
       const response = await instance.get("/post");
       dispatch(setData(response.data));
@@ -15,6 +15,17 @@ export const getDataDB = () => {
     }
   };
 };
+
+export const addDataDB = (data) => {
+  return async (dispatch) => {
+    try {
+      const response = await instance.post("/post", data);
+      dispatch(addData(response.data));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
 
 //Reducer
 const postSlice = createSlice({
@@ -25,9 +36,12 @@ const postSlice = createSlice({
   reducers: {
     setData: (state, action) => {
       state.list = action.payload;
+    },
+    addData: (state, action) => {
+      state.list.push(action.payload);
     }
   },
 });
 
-export const { setData } = postSlice.actions;
+export const { setData, addData } = postSlice.actions;
 export default postSlice.reducer;

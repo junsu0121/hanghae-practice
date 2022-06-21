@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDataDB } from "./redux/modules/postSlice";
+import { addDataDB, getDataDB } from "./redux/modules/postSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -8,25 +8,18 @@ function App() {
   const subjectRef = useRef();
   const contentRef = useRef();
 
-  // const addData = async () => {
-  //   const data = {
-  //     subject: subjectRef.current.value,
-  //     content: contentRef.current.value
-  //   }
-  //   try {
-  //     const response = await instance.post("/post", data);
-  //     setData((current) => [...current, response.data]);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+  const onSubmit = (e) => {
+    e.preventDefault();
 
-  // const onSubmit = (e) => {
-  //   e.preventDefault();
-  //   addData();
-  //   subjectRef.current.value = "";
-  //   contentRef.current.value = "";
-  // }
+    const data = {
+      subject: subjectRef.current.value,
+      content: contentRef.current.value
+    }
+
+    dispatch(addDataDB(data));
+    subjectRef.current.value = "";
+    contentRef.current.value = "";
+  }
 
   useEffect(() => {
     dispatch(getDataDB());
@@ -42,11 +35,11 @@ function App() {
           </div>
         )
       })}
-      {/* <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit}>
         <input type="text" ref={subjectRef}/>
         <input type="text" ref={contentRef}/>
         <button>추가</button>
-      </form> */}
+      </form>
     </div>
   );
 }
