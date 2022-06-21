@@ -1,6 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const instance = axios.create({
+  baseURL: "http://localhost:5001"
+});
+
+export const getDataDB = () => {
+  return async function (dispatch) {
+    try {
+      const response = await instance.get("/post");
+      dispatch(setData(response.data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
 //Reducer
 const postSlice = createSlice({
   name: "post",
@@ -8,11 +23,11 @@ const postSlice = createSlice({
     list: []
   },
   reducers: {
-    changePost: (state, action) => {
-
+    setData: (state, action) => {
+      state.list = action.payload;
     }
   },
 });
 
-export const { changePost } = postSlice.actions;
+export const { setData } = postSlice.actions;
 export default postSlice.reducer;
